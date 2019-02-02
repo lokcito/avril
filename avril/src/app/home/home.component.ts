@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ApiService } from '../api.service';
+import { User } from '../models/user.model';
 
 @Component({
   selector: 'app-home',
@@ -7,11 +9,28 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  users: Object;
+  _user: User;
+
+  constructor(private api: ApiService) { }
 
   ngOnInit() {
   }
   firstClick() {
-    console.log("yay!");
+    this.api.firstClick();
+  }
+  listUsers() {
+  	this.api.getUsers().subscribe(data => {
+  		this.users = data;
+  		console.log(">>>", this.users);
+  	});
+  }
+  createOne() {
+  	this._user = new User();
+  	this._user.id = 23;
+  	console.log("pre new", this._user);
+  	this.api.addUser(this._user).subscribe(data => {
+  		console.log("response", data);
+  	});
   }
 }
